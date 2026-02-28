@@ -20,6 +20,9 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'role_id',
+        'is_active',
+        'is_blocked',
         'password',
     ];
 
@@ -44,5 +47,18 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    //Связь с ролями
+    public function role() {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function permissions() {
+        return $this->belongsToMany(Permission::class);
+    }
+
+    public function allPermissions() {
+        return $this->role->permissions->merge($this->permissions);
     }
 }
