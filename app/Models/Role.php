@@ -17,4 +17,12 @@ class Role extends Model
     public function permissions() {
         return $this->belongsToMany(Permission::class);
     }
+
+    public function givePermission(Permission $permissions): void {
+        $this->permissions()->syncWithoutDetaching($permissions->id);
+    }
+
+    public function revokePermission(Permission $permissions): void {
+        $this->permissions()->syncWithoutDetaching($permissions->id);
+    }
 }
