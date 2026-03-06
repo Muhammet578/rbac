@@ -61,4 +61,24 @@ class User extends Authenticatable
     public function allPermissions() {
         return $this->role->permissions->merge($this->permissions);
     }
+
+    public function hasPermission(string $permissionName): bool
+    {
+        $direct = $this->permissions()
+            ->where('name', $permissionName)
+            ->exists();
+
+        if($direct){
+            return true;
+        }
+
+        if($this->role){
+            return $this->role->permissions()
+                ->where('name', $permissionName)
+                ->exists();
+        }
+
+        return false;
+
+    }
 }
